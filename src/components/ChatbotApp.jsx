@@ -2,9 +2,9 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
 
-const RASA_URL = "http://147.93.112.162:2005/webhooks/rest/webhook";
+const RASA_URL = "https://147.93.112.162:8000/rasa_bot";
 const FORMS_JSON_PATH = "actions/form_filling_code/forms_subset.json";
-const AUTH_URL = "http://147.93.112.162:8000/login";
+const AUTH_URL = "https://147.93.112.162:8000/login";
 
 function ChatbotApp() {
   const [message, setMessage] = useState("");
@@ -63,7 +63,7 @@ function ChatbotApp() {
 
   const exchangeCodeForToken = async (code) => {
     try {
-      const tokenResponse = await axios.post("http://147.93.112.162:8000/token", {
+      const tokenResponse = await axios.post("https://147.93.112.162:8000/token", {
         code,
       });
 

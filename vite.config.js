@@ -1,15 +1,15 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
+import fs from 'fs';
+import path from 'path';
 
+// Use absolute path for certificates
 export default defineConfig({
-  plugins: [react()],
   server: {
-    proxy: {
-      '/webhooks/rest/webhook': {
-        target: 'http://localhost:2005',
-        changeOrigin: true,
-        secure: false,
-      },
+    https: {
+      key: fs.readFileSync(path.resolve('/root/certs/private.key')),
+      cert: fs.readFileSync(path.resolve('/root/certs/cert.crt')),
     },
+    host: true,
+    port: 5173,
   },
 });
