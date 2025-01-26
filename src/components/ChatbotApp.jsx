@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import https from "https";
 
 const RASA_URL = "https://147.93.112.162:8000/rasa_bot";
 const FORMS_JSON_PATH = "actions/form_filling_code/forms_subset.json";
