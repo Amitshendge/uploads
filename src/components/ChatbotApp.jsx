@@ -7,6 +7,10 @@ const RASA_URL = "https://147.93.112.162:8000/rasa_bot";
 const FORMS_JSON_PATH = "actions/form_filling_code/forms_subset.json";
 const AUTH_URL = "https://147.93.112.162:8000/login";
 
+const axiosInstance = axios.create({
+  httpsAgent: new (require("https").Agent)({ rejectUnauthorized: false })
+});
+
 function ChatbotApp() {
   const [message, setMessage] = useState("");
   const [responses, setResponses] = useState([]);
@@ -31,7 +35,7 @@ function ChatbotApp() {
   useEffect(() => {
     const fetchForms = async () => {
       try {
-        const response = await axios.get(FORMS_JSON_PATH);
+        const response = await axiosInstance.get(FORMS_JSON_PATH);
         setForms(response.data);
         setCategories(Object.keys(response.data));
       } catch (error) {
@@ -52,9 +56,7 @@ function ChatbotApp() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get(AUTH_URL,{
-        httpsAgent: new https.Agent({ rejectUnauthorized: false })}
-      );
+      const response = await axiosInstance.get(AUTH_URL);
       const authRedirectUrl = response.data.auth_url;
       console.log("authRedirectUrl", authRedirectUrl);
       window.location.href = authRedirectUrl;
@@ -66,11 +68,8 @@ function ChatbotApp() {
 
   const exchangeCodeForToken = async (code) => {
     try {
-      const tokenResponse = await axios.post("https://147.93.112.162:8000/token", {
-        code
-      },
-      {
-        httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+      const tokenResponse = await axiosInstance.post("https://147.93.112.162:8000/token", {
+        code,
       });
 
       const { access_token, user_info } = tokenResponse.data;
@@ -155,10 +154,7 @@ function ChatbotApp() {
     setResponses((prev) => [...prev, { sender: "user", text }]);
 
     try {
-      const res = await axios.post(RASA_URL, { sender: "user", message: text },
-        {
-          httpsAgent: new https.Agent({ rejectUnauthorized: false }),
-        });
+      const res = await axiosInstance.post(RASA_URL, { sender: "user", message: text });
       const botResponses = res.data.map((r) => ({
         sender: "bot",
         ...r,
