@@ -52,7 +52,9 @@ function ChatbotApp() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get(AUTH_URL);
+      const response = await axios.get(AUTH_URL,{
+        httpsAgent: new https.Agent({ rejectUnauthorized: false })
+      });
       const authRedirectUrl = response.data.auth_url;
       console.log("authRedirectUrl", authRedirectUrl);
       window.location.href = authRedirectUrl;
