@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
-import https from "https";
 
 const RASA_URL = "https://147.93.112.162:8000/rasa_bot";
 const FORMS_JSON_PATH = "actions/form_filling_code/forms_subset.json";
@@ -53,9 +52,7 @@ function ChatbotApp() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get(AUTH_URL,{
-        httpsAgent: new https.Agent({ rejectUnauthorized: false })
-      });
+      const response = await axios.get(AUTH_URL);
       const authRedirectUrl = response.data.auth_url;
       console.log("authRedirectUrl", authRedirectUrl);
       window.location.href = authRedirectUrl;
