@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useLocation } from "react-router-dom";
+import https from "https";
 
 const RASA_URL = "https://147.93.112.162:8000/rasa_bot";
 const FORMS_JSON_PATH = "actions/form_filling_code/forms_subset.json";
@@ -51,7 +52,9 @@ function ChatbotApp() {
 
   const handleLogin = async () => {
     try {
-      const response = await axios.get(AUTH_URL);
+      const response = await axios.get(AUTH_URL,{
+        httpsAgent: new https.Agent({ rejectUnauthorized: false })}
+      );
       const authRedirectUrl = response.data.auth_url;
       console.log("authRedirectUrl", authRedirectUrl);
       window.location.href = authRedirectUrl;
@@ -64,7 +67,10 @@ function ChatbotApp() {
   const exchangeCodeForToken = async (code) => {
     try {
       const tokenResponse = await axios.post("https://147.93.112.162:8000/token", {
-        code,
+        code
+      },
+      {
+        httpsAgent: new https.Agent({ rejectUnauthorized: false }),
       });
 
       const { access_token, user_info } = tokenResponse.data;
@@ -149,7 +155,10 @@ function ChatbotApp() {
     setResponses((prev) => [...prev, { sender: "user", text }]);
 
     try {
-      const res = await axios.post(RASA_URL, { sender: "user", message: text });
+      const res = await axios.post(RASA_URL, { sender: "user", message: text },
+        {
+          httpsAgent: new https.Agent({ rejectUnauthorized: false }),
+        });
       const botResponses = res.data.map((r) => ({
         sender: "bot",
         ...r,
