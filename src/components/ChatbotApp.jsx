@@ -8,7 +8,9 @@ const FORMS_JSON_PATH = "actions/form_filling_code/forms_subset.json";
 const AUTH_URL = "https://147.93.112.162:8000/login";
 
 const axiosInstance = axios.create({
-  httpsAgent: new (require("https").Agent)({ rejectUnauthorized: false })
+  httpsAgent: new https.Agent({  
+    rejectUnauthorized: false // Ignore SSL certificate errors
+  })
 });
 
 function ChatbotApp() {
