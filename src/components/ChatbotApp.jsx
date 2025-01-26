@@ -140,7 +140,7 @@ function ChatbotApp() {
     ) {
       // Validate the date input
       if (!validateDate(text)) {
-        alert("Please enter a valid date in the format YYYY-MM-DD.");
+        alert("Please enter a valid date in the format MM-DD-YYYY.");
         setMessage(""); // Clear the input
         return; // Prevent sending the message
       }
