@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const AUTH_URL = "http://34.168.69.92:8000/login";
+const AUTH_URL = "https://147.93.112.162:8000/login";
 
 function AuthComponent() {
     const handleLogin = async () => {
