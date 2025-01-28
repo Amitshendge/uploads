@@ -5,7 +5,7 @@ function HomePage() {
     const navigate = useNavigate();
 
     const handleOpenChatbot = () => {
-        navigate('/auth'); // Navigate to the authentication route
+        navigate('/chatbot'); // Navigate to the chatbot route
     };
 
     return (
@@ -14,8 +14,8 @@ function HomePage() {
             fontFamily: 'Arial, sans-serif', 
             textAlign: 'center', 
             backgroundColor: '#f0f0f0', 
-            minHeight: '100vh', 
-            width: '100vw', 
+            minHeight: '100vh', // Ensures the div takes at least the full viewport height
+            width: '100vw', // Ensures the div takes the full viewport width
             display: 'flex', 
             flexDirection: 'column', 
             justifyContent: 'center', 
@@ -38,7 +38,7 @@ function HomePage() {
                 onMouseOver={(e) => e.target.style.background = '#005bb5'}
                 onMouseOut={(e) => e.target.style.background = '#007BFF'}
             >
-                Login to Access Chatbots
+                Open Chatbot
             </button>
         </div>
     );

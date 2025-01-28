@@ -1,15 +1,37 @@
-import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import HomePage from './components/HomePage';
-import ChatbotApp from './components/ChatbotApp';
+import React, { useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import HomePage from "./components/HomePage";
+import AuthComponent from "./components/AuthComponent";
+import BotSelection from "./components/BotSelection";
+import ChatbotApp from "./components/ChatbotApp";
+import ChatbotApp1 from "./components/ChatbotApp1";
+import ChatbotApp2 from "./components/ChatbotApp2";
 
 function App() {
-    console.log("App component rendered"); // Debug log
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [user, setUser] = useState(null);
+
+    const handleLoginSuccess = (userInfo) => {
+        setIsAuthenticated(true);
+        setUser(userInfo);
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem("access_token");
+        setIsAuthenticated(false);
+        setUser(null);
+        window.location.href = "/"; // Redirect to homepage
+    };
+
     return (
         <Router>
             <Routes>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/chatbot" element={<ChatbotApp />} />
+                <Route path="/auth" element={<AuthComponent onLoginSuccess={handleLoginSuccess} />} />
+                <Route path="/bot-selection" element={<BotSelection handleLogout={handleLogout} />} />
+                <Route path="/chatbot/bot3" element={<ChatbotApp handleLogout={handleLogout} />} />
+                <Route path="/chatbot/bot1" element={<ChatbotApp1 handleLogout={handleLogout} />} />
+                <Route path="/chatbot/bot2" element={<ChatbotApp2 handleLogout={handleLogout} />} />
             </Routes>
         </Router>
     );
