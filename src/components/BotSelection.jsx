@@ -24,7 +24,7 @@ function BotSelection({ handleLogout }) {
 
     const exchangeCodeForToken = async (code) => {
         try {
-            const tokenResponse = await axios.post("https://147.93.112.162:8000/token", { code });
+            const tokenResponse = await axios.post("https://onestrealestate.io/token", { code });
             localStorage.setItem("access_token", tokenResponse.data.access_token); // Store token
             console.log("Token stored:", tokenResponse.data.access_token); // Debugging
             navigate('/bot-selection'); // Redirect to remove the `code` from the URL

@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { useParams, useNavigate } from "react-router-dom";
 
-const RASA_URL = "https://147.93.112.162:8000/rasa_bot";
+const RASA_URL = "https://onestrealestate.io/rasa_bot";
 const FORMS_JSON_PATH = "/actions/form_filling_code/forms_subset.json";
 
 function ChatbotApp() {

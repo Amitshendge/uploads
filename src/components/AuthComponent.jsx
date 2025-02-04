@@ -1,7 +1,7 @@
 import React from 'react';
 import axios from 'axios';
 
-const AUTH_URL = "https://147.93.112.162:8000/login";
+const AUTH_URL = "https://onestrealestate.io/login";
 
 function AuthComponent() {
     const handleLogin = async () => {
