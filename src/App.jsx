@@ -26,7 +26,7 @@ function App() {
     return (
         <Router>
             <Routes>
-                <Route path="/" element={<HomePage />} />
+                {/* <Route path="/" element={<HomePage />} /> */}
                 <Route path="/auth" element={<AuthComponent onLoginSuccess={handleLoginSuccess} />} />
                 <Route path="/bot-selection" element={<BotSelection handleLogout={handleLogout} />} />
                 <Route path="/chatbot/bot3" element={<ChatbotApp handleLogout={handleLogout} />} />
