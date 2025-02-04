@@ -27,7 +27,7 @@ function BotSelection({ handleLogout }) {
             const tokenResponse = await axios.post("https://onestrealestate.io/token", { code });
             localStorage.setItem("access_token", tokenResponse.data.access_token); // Store token
             console.log("Token stored:", tokenResponse.data.access_token); // Debugging
-            navigate('/bot-selection'); // Redirect to remove the `code` from the URL
+            navigate('/auth/bot-selection'); // Redirect to remove the `code` from the URL
         } catch (error) {
             console.error("Error exchanging code for token:", error);
             alert("Failed to authenticate. Please try again.");
