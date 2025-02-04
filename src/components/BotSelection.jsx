@@ -35,7 +35,7 @@ function BotSelection({ handleLogout }) {
     };
 
     const handleBotSelect = (botId) => {
-        navigate(`/chatbot/${botId}`); // Navigate to the selected bot's chat interface
+        navigate(`/auth/chatbot/${botId}`); // Navigate to the selected bot's chat interface
     };
 
     return (
