@@ -8,6 +8,7 @@ function AuthComponent() {
         try {
             console.log("Redirecting to Azure AD login...");
             const response = await axios.get(AUTH_URL);
+            console.log("Response:", response.data);
             window.location.href = response.data.auth_url; // Redirect to Azure AD login
             console.log("Redirecting to Azure AD login...");
         } catch (error) {
