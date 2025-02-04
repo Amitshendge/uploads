@@ -6,8 +6,10 @@ const AUTH_URL = "https://onestrealestate.io/login";
 function AuthComponent() {
     const handleLogin = async () => {
         try {
+            console.log("Redirecting to Azure AD login...");
             const response = await axios.get(AUTH_URL);
             window.location.href = response.data.auth_url; // Redirect to Azure AD login
+            console.log("Redirecting to Azure AD login...");
         } catch (error) {
             console.error("Error during authentication:", error);
             alert("Failed to initiate login. Please try again.");
