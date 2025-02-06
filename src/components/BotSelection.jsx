@@ -66,7 +66,7 @@ function BotSelection({ handleLogout }) {
     const hasAccessToBot = (botGroupIds) => {
         return botGroupIds.some(groupId => userGroups.includes(groupId));
     };
-
+    
     return (
         <div style={{ 
             display: "flex",
@@ -169,7 +169,7 @@ function BotSelection({ handleLogout }) {
                                 }}
                                 onMouseOver={(e) => {
                                     e.target.style.background = "#005bb5";
-                                    e.target.style.transform = "scale(1.05)"; // Slight scale effect on hover
+                                    e.target.style.transform = "scale(1.05)"; // Slight scale ffect on hover
                                 }}
                                 onMouseOut={(e) => {
                                     e.target.style.background = "#007BFF";
