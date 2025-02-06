@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 function BotSelection({ handleLogout }) {
     const location = useLocation();
     const navigate = useNavigate();
+    const [userGroups, setUserGroups] = useState([]);
 
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
@@ -18,6 +19,9 @@ function BotSelection({ handleLogout }) {
             const accessToken = localStorage.getItem("access_token");
             if (!accessToken) {
                 navigate("/auth"); // Redirect to auth if no token
+            } else {
+                // Fetch user groups if already authenticated
+                fetchUserGroups();
             }
         }
     }, [location, navigate]);
@@ -27,6 +31,7 @@ function BotSelection({ handleLogout }) {
             const tokenResponse = await axios.post("https://onestrealestate.io/token", { code });
             localStorage.setItem("access_token", tokenResponse.data.access_token); // Store token
             console.log("Token stored:", tokenResponse.data.access_token); // Debugging
+            setUserGroups(tokenResponse.data.user.groups); // Store user groups
             navigate('/auth/bot-selection'); // Redirect to remove the `code` from the URL
         } catch (error) {
             console.error("Error exchanging code for token:", error);
@@ -34,8 +39,32 @@ function BotSelection({ handleLogout }) {
         }
     };
 
+    const fetchUserGroups = async () => {
+        try {
+            const response = await axios.get("https://onestrealestate.io/user", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("access_token")}`
+                }
+            });
+            setUserGroups(response.data.user.groups);
+        } catch (error) {
+            console.error("Error fetching user groups:", error);
+        }
+    };
+
     const handleBotSelect = (botId) => {
         navigate(`/auth/chatbot/${botId}`); // Navigate to the selected bot's chat interface
+    };
+
+    // Define bot groups
+    const botGroups = {
+        "ONest Bot": ["049a2fae-0e46-456d-98bc-48262e546d28"],
+        "SkySLope and Agent bot": ["41c81643-ff1a-44e1-b941-15fdbf4852a4"]
+    };
+
+    // Check if user has access to a bot
+    const hasAccessToBot = (botGroupIds) => {
+        return botGroupIds.some(groupId => userGroups.includes(groupId));
     };
 
     return (
@@ -95,81 +124,87 @@ function BotSelection({ handleLogout }) {
                     flexDirection: "column",
                     gap: "15px",
                 }}>
-                    <button 
-                        onClick={() => handleBotSelect("bot1")}
-                        style={{ 
-                            padding: "15px 30px", 
-                            borderRadius: "8px", 
-                            background: "#007BFF", 
-                            color: "#fff", 
-                            border: "none", 
-                            cursor: "pointer", 
-                            fontSize: "1.1rem", 
-                            fontWeight: "bold",
-                            transition: "background 0.3s ease, transform 0.2s ease",
-                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)", // Button shadow
-                        }}
-                        onMouseOver={(e) => {
-                            e.target.style.background = "#005bb5";
-                            e.target.style.transform = "scale(1.05)"; // Slight scale effect on hover
-                        }}
-                        onMouseOut={(e) => {
-                            e.target.style.background = "#007BFF";
-                            e.target.style.transform = "scale(1)";
-                        }}
-                    >
-                        oNEST Bot
-                    </button>
-                    <button 
-                        onClick={() => handleBotSelect("bot2")}
-                        style={{ 
-                            padding: "15px 30px", 
-                            borderRadius: "8px", 
-                            background: "#007BFF", 
-                            color: "#fff", 
-                            border: "none", 
-                            cursor: "pointer", 
-                            fontSize: "1.1rem", 
-                            fontWeight: "bold",
-                            transition: "background 0.3s ease, transform 0.2s ease",
-                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)", // Button shadow
-                        }}
-                        onMouseOver={(e) => {
-                            e.target.style.background = "#005bb5";
-                            e.target.style.transform = "scale(1.05)"; // Slight scale effect on hover
-                        }}
-                        onMouseOut={(e) => {
-                            e.target.style.background = "#007BFF";
-                            e.target.style.transform = "scale(1)";
-                        }}
-                    >
-                        Agent Resource Bot
-                    </button>
-                    <button 
-                        onClick={() => handleBotSelect("bot3")}
-                        style={{ 
-                            padding: "15px 30px", 
-                            borderRadius: "8px", 
-                            background: "#007BFF", 
-                            color: "#fff", 
-                            border: "none", 
-                            cursor: "pointer", 
-                            fontSize: "1.1rem", 
-                            fontWeight: "bold",
-                            transition: "background 0.3s ease, transform 0.2s ease",
-                            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)", // Button shadow
-                        }}
-                        onMouseOver={(e) => {
-                            e.target.style.background = "#005bb5";
-                            e.target.style.transform = "scale(1.05)"; // Slight scale effect on hover
-                        }}
-                        onMouseOut={(e) => {
-                            e.target.style.background = "#007BFF";
-                            e.target.style.transform = "scale(1)";
-                        }}
-                    >
-                        Skyslope Form Bot
-                    </button>
+                    {hasAccessToBot(botGroups["ONest Bot"]) && (
+                        <button 
+                            onClick={() => handleBotSelect("bot1")}
+                            style={{ 
+                                padding: "15px 30px", 
+                                borderRadius: "8px", 
+                                background: "#007BFF", 
+                                color: "#fff", 
+                                border: "none", 
+                                cursor: "pointer", 
+                                fontSize: "1.1rem", 
+                                fontWeight: "bold",
+                                transition: "background 0.3s ease, transform 0.2s ease",
+                                boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)", // Button shadow
+                            }}
+                            onMouseOver={(e) => {
+                                e.target.style.background = "#005bb5";
+                                e.target.style.transform = "scale(1.05)"; // Slight scale effect on hover
+                            }}
+                            onMouseOut={(e) => {
+                                e.target.style.background = "#007BFF";
+                                e.target.style.transform = "scale(1)";
+                            }}
+                        >
+                            oNEST Bot
+                        </button>
+                    )}
+                    {hasAccessToBot(botGroups["SkySLope and Agent bot"]) && (
+                        <>
+                            <button 
+                                onClick={() => handleBotSelect("bot2")}
+                                style={{ 
+                                    padding: "15px 30px", 
+                                    borderRadius: "8px", 
+                                    background: "#007BFF", 
+                                    color: "#fff", 
+                                    border: "none", 
+                                    cursor: "pointer", 
+                                    fontSize: "1.1rem", 
+                                    fontWeight: "bold",
+                                    transition: "background 0.3s ease, transform 0.2s ease",
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)", // Button shadow
+                                }}
+                                onMouseOver={(e) => {
+                                    e.target.style.background = "#005bb5";
+                                    e.target.style.transform = "scale(1.05)"; // Slight scale effect on hover
+                                }}
+                                onMouseOut={(e) => {
+                                    e.target.style.background = "#007BFF";
+                                    e.target.style.transform = "scale(1)";
+                                }}
+                            >
+                                Agent Resource Bot
+                            </button>
+                            <button 
+                                onClick={() => handleBotSelect("bot3")}
+                                style={{ 
+                                    padding: "15px 30px", 
+                                    borderRadius: "8px", 
+                                    background: "#007BFF", 
+                                    color: "#fff", 
+                                    border: "none", 
+                                    cursor: "pointer", 
+                                    fontSize: "1.1rem", 
+                                    fontWeight: "bold",
+                                    transition: "background 0.3s ease, transform 0.2s ease",
+                                    boxShadow: "0 4px 6px rgba(0, 0, 0, 0.2)", // Button shadow
+                                }}
+                                onMouseOver={(e) => {
+                                    e.target.style.background = "#005bb5";
+                                    e.target.style.transform = "scale(1.05)"; // Slight scale effect on hover
+                                }}
+                                onMouseOut={(e) => {
+                                    e.target.style.background = "#007BFF";
+                                    e.target.style.transform = "scale(1)";
+                                }}
+                            >
+                                Skyslope Form Bot
+                            </button>
+                        </>
+                    )}
                 </div>
 
                 {/* Logout Button */}
