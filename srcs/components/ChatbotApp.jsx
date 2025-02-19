@@ -150,7 +150,7 @@ function ChatbotApp() {
     setResponses((prev) => [...prev, { sender: "user", text }]);
 
     try {
-      const res = await axios.post(RASA_URL, { sender: user['name'], message: text });
+      const res = await axios.post(RASA_URL, { sender: user['preferred_username'], message: text });
       const botResponses = res.data.map((r) => ({
         sender: "bot",
         ...r,
